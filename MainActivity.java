@@ -73,6 +73,33 @@ public class MainActivity extends AppCompatActivity{
         return finalimage;
     }
 
+    public static Bitmap detectImage(Bitmap original){
+
+        Bitmap finalimage = Bitmap.createBitmap(original.getWidth(), original.getHeight(), original.getConfig());
+
+        int A;
+        int R;
+        int G;
+        int B;
+        int pixelColor;
+        int height = original.getHeight();
+        int width = original.getWidth();
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                pixelColor = original.getPixel(x, y);
+                A = Color.alpha(pixelColor);
+                R = 255 - Color.red(pixelColor);
+                G = 255 - Color.green(pixelColor);
+                B = 255 - Color.blue(pixelColor);
+                finalimage.setPixel(x, y, Color.argb(A, R, G, B));
+            }
+        }
+        return finalimage;
+    }
+
 
     public void makeNegative(View view) throws IOException {
         //Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -83,4 +110,5 @@ public class MainActivity extends AppCompatActivity{
         imageView.setImageBitmap(newImage);
 
     }
+
 }
