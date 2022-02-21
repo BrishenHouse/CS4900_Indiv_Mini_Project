@@ -13,10 +13,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.pytorch.IValue;
+import org.pytorch.LiteModuleLoader;
 import org.pytorch.Module;
 import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
@@ -27,6 +30,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -87,18 +93,25 @@ public class MainActivity extends AppCompatActivity{
                     {android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
 
-        try {
+
+        //try {
             // (possibly not needed)
             //bitmap = BitmapFactory.decodeStream(getAssets().open("kitten.jpg"));
 
             //loading serialized torchscript module from package into app android asset resnet18_scripted.py
             //app/src/module/assets/resnet18_scripted.py
-            module = Module.load(assetFilePath(this, "resnet18_scripted.py"));
+            //module = Module.load(assetFilePath(this, "resnet18_scripted.py"));
+        //module = Module.load("/Users/brishenhouse/AndroidStudioProjects/House_Indiv_Mini_Project/app/src/main/assets/resnet18_scripted.py");
 
+        try {
+            module = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "resnet18_scripted_efficient.py"));        //} catch (IOException e) {
         } catch (IOException e) {
-            Log.e("PTRDryRun", "Error Reading assets", e);
-            finish();
+            e.printStackTrace();
         }
+        //  Log.e("PTRDryRun", "Error Reading assets", e);
+         //   finish();
+       // }
+
 
         // (possibly not needed) showing Image on UI
         //ImageView imageView = findViewById(R.id.imageView);
@@ -119,12 +132,13 @@ public class MainActivity extends AppCompatActivity{
         // determining the functionality of the classify button
         Button classify = findViewById(R.id.classify);
         classify.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
 
-//                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                //Intent.setType("image/*");
-//                startActivityForResult(intent, 3);
+                //Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                //Intent.setType("image/*");
+                //startActivityForResult(intent, 3);
 
                 final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
                         TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
@@ -145,11 +159,29 @@ public class MainActivity extends AppCompatActivity{
                     }
                 }
 
-                //String className = com.example.classifier.ImageNetClasses.IMAGENET_CLASSES[maxScoreIdx];
+                //Getting the String of the class name from "imagenet_classes.txt"
+                String className = null;
+                try{
+                    Scanner scan = new Scanner("imagenet_classes.txt");
+                    className = scan.next();
+//                    int x=0;
+//                    while (x <= maxScoreIdx){
+//                        String nextLine = scan.nextLine();
+//                        if(x==maxScoreIdx){
+//                            className = nextLine;
+//                        }
+//                        x += 1;
+//                    }
+                    scan.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("you suck");
+                }
+//                String className = com.example.house_indiv_mini_project.ImageNetClasses.IMAGENET_CLASSES[maxScoreIdx];
 
                 // showing classname on UI
-                //TextView textView = findViewById(R.id.resultView);
-                //textView.setText(className);
+                TextView textView = findViewById(R.id.resultView);
+                textView.setText(className);
             }
         });
     }
