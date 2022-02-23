@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity{
                 //Intent.setType("image/*");
                 //startActivityForResult(intent, 3);
 
+                //converting bitmap to Tensor
                 final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
                         TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
 
@@ -160,24 +161,26 @@ public class MainActivity extends AppCompatActivity{
                 }
 
                 //Getting the String of the class name from "imagenet_classes.txt"
-                String className = null;
-                try{
-                    Scanner scan = new Scanner("imagenet_classes.txt");
-                    className = scan.next();
-//                    int x=0;
-//                    while (x <= maxScoreIdx){
-//                        String nextLine = scan.nextLine();
-//                        if(x==maxScoreIdx){
-//                            className = nextLine;
-//                        }
-//                        x += 1;
-//                    }
-                    scan.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("you suck");
-                }
-//                String className = com.example.house_indiv_mini_project.ImageNetClasses.IMAGENET_CLASSES[maxScoreIdx];
+//                String className = null;
+//                try{
+//                    Scanner scan = new Scanner("imagenet_classes.txt");
+//                    scan.nextLine();
+//                    className = scan.nextLine();
+//
+////                    int x=0;
+////                    while (x <= maxScoreIdx){
+////                        String nextLine = scan.nextLine();
+////                        if(x==maxScoreIdx){
+////                            className = nextLine;
+////                        }
+////                        x += 1;
+////                    }
+//                    scan.close();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    System.out.println("you suck");
+//                }
+                String className = com.example.house_indiv_mini_project.ImageNetClasses.IMAGENET_CLASSES[maxScoreIdx];
 
                 // showing classname on UI
                 TextView textView = findViewById(R.id.resultView);
