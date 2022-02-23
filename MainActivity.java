@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,9 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Scanner;
+
 
 public class MainActivity extends AppCompatActivity{
 
@@ -93,29 +89,12 @@ public class MainActivity extends AppCompatActivity{
                     {android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
 
-
-        //try {
-            // (possibly not needed)
-            //bitmap = BitmapFactory.decodeStream(getAssets().open("kitten.jpg"));
-
-            //loading serialized torchscript module from package into app android asset resnet18_scripted.py
-            //app/src/module/assets/resnet18_scripted.py
-            //module = Module.load(assetFilePath(this, "resnet18_scripted.py"));
-        //module = Module.load("/Users/brishenhouse/AndroidStudioProjects/House_Indiv_Mini_Project/app/src/main/assets/resnet18_scripted.py");
-
         try {
+            //loads the Scripted PyTorch model from the assets folder
             module = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "resnet18_scripted_efficient.py"));        //} catch (IOException e) {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //  Log.e("PTRDryRun", "Error Reading assets", e);
-         //   finish();
-       // }
-
-
-        // (possibly not needed) showing Image on UI
-        //ImageView imageView = findViewById(R.id.imageView);
-        //imageView.setImageBitmap(bitmap);
 
         // determining the functionality of the gallery button
         Button gallery = findViewById(R.id.gallery);
@@ -135,10 +114,6 @@ public class MainActivity extends AppCompatActivity{
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-
-                //Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                //Intent.setType("image/*");
-                //startActivityForResult(intent, 3);
 
                 //converting bitmap to Tensor
                 final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
@@ -160,26 +135,7 @@ public class MainActivity extends AppCompatActivity{
                     }
                 }
 
-                //Getting the String of the class name from "imagenet_classes.txt"
-//                String className = null;
-//                try{
-//                    Scanner scan = new Scanner("imagenet_classes.txt");
-//                    scan.nextLine();
-//                    className = scan.nextLine();
-//
-////                    int x=0;
-////                    while (x <= maxScoreIdx){
-////                        String nextLine = scan.nextLine();
-////                        if(x==maxScoreIdx){
-////                            className = nextLine;
-////                        }
-////                        x += 1;
-////                    }
-//                    scan.close();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    System.out.println("you suck");
-//                }
+                //uses maxScoreIdx to locate the class label in the ImageNetClasses java class
                 String className = com.example.house_indiv_mini_project.ImageNetClasses.IMAGENET_CLASSES[maxScoreIdx];
 
                 // showing classname on UI
