@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity{
 
         try {
             //loads the Scripted PyTorch model from the assets folder
-            module = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "resnet18_scripted_efficient.py"));        //} catch (IOException e) {
+            module = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "scripted_resnet18_optimized.py"));
         } catch (IOException e) {
             e.printStackTrace();
         }
