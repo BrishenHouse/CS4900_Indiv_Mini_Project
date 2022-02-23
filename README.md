@@ -7,11 +7,17 @@ The app build.Gradle file implemted the newest android versions. Main Activity c
 
 # Each File
 MainActivity.java - java class containing the functions for both buttons, ImageView, image-to-bitmap conversion, bitmap-to-Tensor conversion, PyTorch-module loading, module/image processing, class mapping, and ImageView updating
+
 ImageNetClasses.java - Helper java class containing String array of the class labels for easier class mapping
+
 activity_main.xml - XML architecture of the app's UI
+
 scripted_resnet18_optimized.ipynb - Python code in which I obtained the scripted module through Google Colab
+
 scripted_resnet18_optimized.py - scripted module of resnet18 optimized for mobile use, quite useless to the human eye
+
 LICENSE - MIT License detailing permissions
+
 README.md - Markdown file detailing the description of this repository (CS4900_Indiv_Mini_Project)
 
 # Main Resources
