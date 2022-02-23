@@ -1,5 +1,5 @@
 # CS4900_Indiv_Mini_Project
-Android App with Image Classification
+Android App with Image Classification by Brishen House
 # Functionality
 The app has two buttons. One to load an Image from the gallery, and the other to initiate the classification process to display the predicted class name of the image. The only other visible feature of the app is the ImageView that contains a generic image icon when now image has been selected
 # Main Characteristics
